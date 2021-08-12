@@ -1,0 +1,31 @@
+{
+  "name": "netplan-config",
+  "version": "1.0.0",
+  "description": "Network configuration using netplan",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/justinschw/netplan-config.git"
+  },
+  "keywords": [
+    "networking",
+    "linux",
+    "netplan"
+  ],
+  "author": "Justin Schwartzbeck (justinmschw@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/justinschw/netplan-config/issues"
+  },
+  "homepage": "https://github.com/justinschw/netplan-config#readme",
+  "dependencies": {
+    "dnsmasq-dhcp": "1.0.2",
+    "yaml": "1.10.2"
+  },
+  "devDependencies": {
+    "mocha": "9.0.3"
+  }
+}
