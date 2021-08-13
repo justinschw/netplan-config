@@ -142,7 +142,6 @@ describe('/lib/netplan', function() {
 			});
 			netplan.configureInterface('wlan0', {
 				dhcp: false,
-				type: 'wifi',
 				ip: '10.54.1.120',
 				nameservers: ['10.54.1.1'],
 				defaultGateway: '10.54.1.1',
@@ -164,7 +163,6 @@ describe('/lib/netplan', function() {
 			});
 			netplan.configureInterface('eth0', {
 				dhcp: true,
-				type: 'ethernet'
 			});
 			expect(
 				JSON.stringify(netplan.plan, null, 2)
@@ -179,11 +177,9 @@ describe('/lib/netplan', function() {
 			});
 			netplan.configureInterface('eth0', {
 				dhcp: false,
-				type: 'ethernet',
 				ip: '192.168.4.8'
 			});
 			netplan.configureInterface('wlan0', {
-				type: 'wifi',
 				accessPoint: {
 					ssid: 'TellMyWiFiLoveHer',
 					wifiPassword: 'supersecretpassword'
