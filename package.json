@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/justinschw/netplan-config#readme",
   "dependencies": {
+    "joi": "17.4.2",
     "yaml": "1.10.2"
   },
   "devDependencies": {
