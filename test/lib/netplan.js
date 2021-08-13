@@ -11,6 +11,8 @@ const fs = require('fs');
 const testData = {
 	oneStaticEth:
 		JSON.parse(fs.readFileSync(`${__dirname}/../data/1StaticEth.json`, 'utf8')),
+	oneDhcpEth:
+		JSON.parse(fs.readFileSync(`${__dirname}/../data/1DhcpEth.json`, 'utf8')),
 	oneStaticEthInterface:
 		JSON.parse(fs.readFileSync(`${__dirname}/../data/StaticEthInterface.json`, 'utf8')),
 	oneStaticEthInterfaceNoGateway:
@@ -18,7 +20,9 @@ const testData = {
 	oneStaticEthOneDhcpWifi:
 		JSON.parse(fs.readFileSync(`${__dirname}/../data/1StaticEth1DhcpWifi.json`, 'utf8')),
 	oneDhcpWifiInterface:
-		JSON.parse(fs.readFileSync(`${__dirname}/../data/DhcpWifiInterface.json`, 'utf8'))
+		JSON.parse(fs.readFileSync(`${__dirname}/../data/DhcpWifiInterface.json`, 'utf8')),
+	oneStaticEthNoGatewayOneStaticWifi:
+		JSON.parse(fs.readFileSync(`${__dirname}/../data/1StaticEthNoGateway1StaticWifi.json`, 'utf8'))
 };
 
 async function expectError(fn) {
@@ -110,6 +114,87 @@ describe('/lib/netplan', function() {
 			done();
 		});
     });
+
+	describe('configureStaticInterface', function() {
+		it('valid ethernet static', function(done) {
+			const netplan = new NetPlan({
+				configFile: '/tmp/netplan.yaml'
+			});
+			netplan.configureStaticInterface('eth0', {
+				ip: '192.168.4.8',
+				defaultGateway: '192.168.4.1',
+				nameservers: ['192.168.4.1'],
+				domain: 'guardian-angel.local'
+			});
+			expect(
+				JSON.stringify(netplan.plan, null, 2)
+			).eql(JSON.stringify(testData.oneStaticEth, null, 2));
+			// TODO: test configureInterface
+			done();
+		});
+
+		it('valid wifi static', function(done) {
+			const netplan = new NetPlan({
+				configFile: '/tmp/netplan.yaml'
+			});
+			netplan.configureStaticInterface('eth0', {
+				ip: '192.168.4.8'
+			});
+			netplan.configureStaticInterface('wlan0', {
+				type: 'wifi',
+				ip: '10.54.1.120',
+				nameservers: ['10.54.1.1'],
+				defaultGateway: '10.54.1.1',
+				accessPoint: {
+					ssid: 'TellMyWiFiLoveHer',
+					wifiPassword: 'supersecretpassword'
+				}
+			})
+			expect(
+				JSON.stringify(netplan.plan, null, 2)
+			).eql(JSON.stringify(testData.oneStaticEthNoGatewayOneStaticWifi, null, 2));
+			// TODO: test configureInterface
+			done();
+		});
+	});
+
+	describe('configureDhcpInterface', function() {
+		it('valid ethernet dhcp', function(done) {
+			const netplan = new NetPlan({
+				configFile: '/tmp/netplan.yaml'
+			});
+			netplan.configureDhcpInterface('eth0', {
+				type: 'ethernet'
+			});
+			expect(
+				JSON.stringify(netplan.plan, null, 2)
+			).eql(JSON.stringify(testData.oneDhcpEth, null, 2));
+			// TODO: test configureInterface
+			done();
+		});
+
+		it('valid wifi dhcp', function(done) {
+			const netplan = new NetPlan({
+				configFile: '/tmp/netplan.yaml'
+			});
+			netplan.configureStaticInterface('eth0', {
+				type: 'ethernet',
+				ip: '192.168.4.8'
+			});
+			netplan.configureDhcpInterface('wlan0', {
+				type: 'wifi',
+				accessPoint: {
+					ssid: 'TellMyWiFiLoveHer',
+					wifiPassword: 'supersecretpassword'
+				}
+			});
+			expect(
+				JSON.stringify(netplan.plan, null, 2)
+			).eql(JSON.stringify(testData.oneStaticEthOneDhcpWifi, null, 2));
+			// TODO: test configureInterface
+			done();
+		});
+	});
 
     describe('apply', function() {
     	it('success', function(done) {

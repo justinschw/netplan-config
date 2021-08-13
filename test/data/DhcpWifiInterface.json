@@ -5,7 +5,7 @@
     "dhcp4": "yes",
     "access-points": {
       "TellMyWiFiLoveHer": {
-        "password": "supresecretpassword"
+        "password": "supersecretpassword"
       }
     }
   }
