@@ -1,0 +1,12 @@
+{
+  "name": "wlan0",
+  "type": "wifi",
+  "definition": {
+    "dhcp4": "yes",
+    "access-points": {
+      "TellMyWiFiLoveHer": {
+        "password": "supresecretpassword"
+      }
+    }
+  }
+}

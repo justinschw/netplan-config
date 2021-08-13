@@ -1,0 +1,9 @@
+{
+  "name": "eth0",
+  "type": "ethernet",
+  "definition": {
+    "addresses": [
+      "192.168.4.8/24"
+    ]
+  }
+}

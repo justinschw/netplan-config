@@ -1,0 +1,23 @@
+{
+  "network": {
+    "version": 2,
+    "renderer": "networkd",
+    "ethernets": {
+      "eth0": {
+        "addresses": [
+          "192.168.4.8/24"
+        ]
+      }
+    },
+    "wifis": {
+      "wlan0": {
+        "dhcp4": "yes",
+        "access-points": {
+          "TellMyWiFiLoveHer": {
+            "password": "supresecretpassword"
+          }
+        }
+      }
+    }
+  }
+}
