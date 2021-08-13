@@ -128,7 +128,6 @@ describe('/lib/netplan', function() {
 			expect(
 				JSON.stringify(netplan.plan, null, 2)
 			).eql(JSON.stringify(testData.oneStaticEth, null, 2));
-			// TODO: test configureInterface
 			done();
 		});
 
@@ -180,6 +179,7 @@ describe('/lib/netplan', function() {
 				ip: '192.168.4.8'
 			});
 			netplan.configureInterface('wlan0', {
+				dhcp: true,
 				accessPoint: {
 					ssid: 'TellMyWiFiLoveHer',
 					wifiPassword: 'supersecretpassword'
@@ -188,7 +188,6 @@ describe('/lib/netplan', function() {
 			expect(
 				JSON.stringify(netplan.plan, null, 2)
 			).eql(JSON.stringify(testData.oneStaticEthOneDhcpWifi, null, 2));
-			// TODO: test configureInterface
 			done();
 		});
 	});
