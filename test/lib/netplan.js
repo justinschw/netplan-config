@@ -88,16 +88,15 @@ describe('/lib/netplan', function() {
 		});
 	});
 
-    describe('configureInterface', function() {
+    describe('configureNetplanInterface', function() {
 		it('valid ethernet static', function(done) {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureInterface(testData.oneStaticEthInterface);
+			netplan.configureNetplanInterface(testData.oneStaticEthInterface);
 			expect(
 				JSON.stringify(netplan.plan, null, 2)
 			).eql(JSON.stringify(testData.oneStaticEth, null, 2));
-			// TODO: test configureInterface
 			done();
 		});
 
@@ -105,22 +104,22 @@ describe('/lib/netplan', function() {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureInterface(testData.oneStaticEthInterfaceNoGateway);
-			netplan.configureInterface(testData.oneDhcpWifiInterface);
+			netplan.configureNetplanInterface(testData.oneStaticEthInterfaceNoGateway);
+			netplan.configureNetplanInterface(testData.oneDhcpWifiInterface);
 			expect(
 				JSON.stringify(netplan.plan, null, 2)
 			).eql(JSON.stringify(testData.oneStaticEthOneDhcpWifi, null, 2));
-			// TODO: test configureInterface
 			done();
 		});
     });
 
-	describe('configureStaticInterface', function() {
+	describe('configureInterface', function() {
 		it('valid ethernet static', function(done) {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureStaticInterface('eth0', {
+			netplan.configureInterface('eth0', {
+				dhcp: false,
 				ip: '192.168.4.8',
 				defaultGateway: '192.168.4.1',
 				nameservers: ['192.168.4.1'],
@@ -137,10 +136,12 @@ describe('/lib/netplan', function() {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureStaticInterface('eth0', {
+			netplan.configureInterface('eth0', {
+				dhcp: false,
 				ip: '192.168.4.8'
 			});
-			netplan.configureStaticInterface('wlan0', {
+			netplan.configureInterface('wlan0', {
+				dhcp: false,
 				type: 'wifi',
 				ip: '10.54.1.120',
 				nameservers: ['10.54.1.1'],
@@ -156,14 +157,13 @@ describe('/lib/netplan', function() {
 			// TODO: test configureInterface
 			done();
 		});
-	});
 
-	describe('configureDhcpInterface', function() {
 		it('valid ethernet dhcp', function(done) {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureDhcpInterface('eth0', {
+			netplan.configureInterface('eth0', {
+				dhcp: true,
 				type: 'ethernet'
 			});
 			expect(
@@ -177,11 +177,12 @@ describe('/lib/netplan', function() {
 			const netplan = new NetPlan({
 				configFile: '/tmp/netplan.yaml'
 			});
-			netplan.configureStaticInterface('eth0', {
+			netplan.configureInterface('eth0', {
+				dhcp: false,
 				type: 'ethernet',
 				ip: '192.168.4.8'
 			});
-			netplan.configureDhcpInterface('wlan0', {
+			netplan.configureInterface('wlan0', {
 				type: 'wifi',
 				accessPoint: {
 					ssid: 'TellMyWiFiLoveHer',
