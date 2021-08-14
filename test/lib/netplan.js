@@ -6,6 +6,7 @@ require('child_process').spawn = mySpawn;
 const NetPlan = require('../../index');
 const expect = require('chai').expect;
 const assert = require('chai').assert;
+const sandbox = require('sinon').createSandbox();
 const fs = require('fs');
 
 const testData = {
@@ -22,7 +23,11 @@ const testData = {
 	oneDhcpWifiInterface:
 		JSON.parse(fs.readFileSync(`${__dirname}/../data/DhcpWifiInterface.json`, 'utf8')),
 	oneStaticEthNoGatewayOneStaticWifi:
-		JSON.parse(fs.readFileSync(`${__dirname}/../data/1StaticEthNoGateway1StaticWifi.json`, 'utf8'))
+		JSON.parse(fs.readFileSync(`${__dirname}/../data/1StaticEthNoGateway1StaticWifi.json`, 'utf8')),
+	ipOutput: fs.readFileSync(`${__dirname}/../data/ipoutput.json`, 'utf8'),
+	routeOutput: fs.readFileSync(`${__dirname}/../data/routeoutput.txt`, 'utf8'),
+	route6output: fs.readFileSync(`${__dirname}/../data/route6output.txt`, 'utf8'),
+	route6OutputWithGateway: fs.readFileSync(`${__dirname}/../data/route6outputwithgateway.txt`, 'utf8')
 };
 
 async function expectError(fn) {
@@ -242,5 +247,41 @@ describe('/lib/netplan', function() {
 			});
 		});
 	});
+
+    describe('status', function() {
+    	afterEach(function() {
+    		sandbox.restore();
+		});
+
+    	it('valid', async function() {
+			const netplan = new NetPlan();
+			const execStub = sandbox.stub(netplan, 'executeBinary');
+			execStub.onFirstCall().resolves({stdout: testData.ipOutput});
+			execStub.onSecondCall().resolves({stdout: testData.routeOutput});
+			execStub.onThirdCall().resolves({stdout: testData.route6output});
+
+			const status = await netplan.status();
+			expect(status.eno1).not.undefined;
+			expect(status.eno1.ipv4).not.undefined;
+			expect(status.eno1.ipv4.gateway).not.undefined;
+			expect(status.eno1.ipv6).not.undefined;
+			expect(status.eno1.ipv6.gateway).undefined;
+		});
+
+		it('valid ipv6 gateway', async function() {
+			const netplan = new NetPlan();
+			const execStub = sandbox.stub(netplan, 'executeBinary');
+			execStub.onFirstCall().resolves({stdout: testData.ipOutput});
+			execStub.onSecondCall().resolves({stdout: testData.routeOutput});
+			execStub.onThirdCall().resolves({stdout: testData.route6OutputWithGateway});
+
+			const status = await netplan.status();
+			expect(status.eno1).not.undefined;
+			expect(status.eno1.ipv4).not.undefined;
+			expect(status.eno1.ipv4.gateway).not.undefined;
+			expect(status.eno1.ipv6).not.undefined;
+			expect(status.eno1.ipv6.gateway).not.undefined;
+		});
+	})
     
 });

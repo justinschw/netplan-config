@@ -1,0 +1,79 @@
+[
+  {
+    "ifindex": 1,
+    "ifname": "lo",
+    "flags": [
+      "LOOPBACK",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 65536,
+    "qdisc": "noqueue",
+    "operstate": "UNKNOWN",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "loopback",
+    "address": "00:00:00:00:00:00",
+    "broadcast": "00:00:00:00:00:00",
+    "addr_info": [
+      {
+        "family": "inet",
+        "local": "127.0.0.1",
+        "prefixlen": 8,
+        "scope": "host",
+        "label": "lo",
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      },
+      {
+        "family": "inet6",
+        "local": "::1",
+        "prefixlen": 128,
+        "scope": "host",
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      }
+    ]
+  },
+  {
+    "ifindex": 2,
+    "ifname": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "pfifo_fast",
+    "operstate": "UP",
+    "group": "default",
+    "txqlen": 1000,
+    "link_type": "ether",
+    "address": "aa:bb:cc:dd:ee:ff",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "addr_info": [
+      {
+        "family": "inet",
+        "local": "192.168.1.36",
+        "prefixlen": 24,
+        "broadcast": "192.168.1.255",
+        "scope": "global",
+        "dynamic": true,
+        "noprefixroute": true,
+        "label": "eno1",
+        "valid_life_time": 66800,
+        "preferred_life_time": 66800
+      },
+      {
+        "family": "inet6",
+        "local": "1234::5678:9abc:def0:1234",
+        "prefixlen": 64,
+        "scope": "link",
+        "noprefixroute": true,
+        "valid_life_time": 4294967295,
+        "preferred_life_time": 4294967295
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+Kernel IPv6 routing table
+Destination                    Next Hop                   Flag Met Ref Use If
+::1/128                        ::                         U    256 1     0 lo
+fe80::/64                      ::                         U    100 1     0 eno1
+::/0                           ::                         !n   -1  1     0 lo
+::1/128                        ::                         Un   0   5     0 lo
+fe80::1234:5678:90ab:cdef/128  ::                         Un   0   2     0 eno1
+ff00::/8                       ::                         U    256 6     0 eno1
+::/0                           ::                         !n   -1  1     0 lo
