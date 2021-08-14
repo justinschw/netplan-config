@@ -19,8 +19,11 @@ const Netplan = require('netplan-config');
 // Initialize
 const net = new Netplan();
 
-// If /etc/netplan/config.yanml is present, you may want to load it first before making changes
-// If you just want to create a new config from scratch and define all the interfaces, don't bother with this.
+/*  If /etc/netplan/config.yanml is present, you may want to load it first
+ *  before making changes.
+ *  If you just want to create a new config from scratch and define all
+ *  the interfaces, don't bother with this.
+ */
 net.loadConfig()
 
 // Configure eth0 as a DHCP WAN interface
@@ -41,8 +44,10 @@ net.configureInterface('eth0', {
   ip: '192.168.4.8'
 });
 
-// Configure wlan0 as a static LAN interface so that I can run hostapd on it
-// Use 255.255.0.0 (/16) subnet
+/*  Configure wlan0 as a static LAN interface so that I can run hostapd
+ *  on it.
+ *  Use 255.255.0.0 (/16) subnet
+*/
 net.configureInterface('wlan0', {
   ip: '192.168.0.1',
   prefix: 16
@@ -69,17 +74,22 @@ net.configureInterface('wlan0', {
   }
 });
 
-// Now that I have made up my mind, don't forget to write back to /etc/netplan/config.yaml
+/* Now that I have made up my mind, don't forget to write back to
+ * /etc/netplan/config.yaml
+ */
 net.writeConfig();
 
 // I am now ready to apply.
 net.apply().then(result => {
   console.log(`Successfully returned code=${result.code}`);
 }).catch(err => {
-  console.error(`Uh oh, something went wrong. return code was ${err.code} with message: ${err.stderr}`);
+  console.error('Uh oh, something went wrong.');
 });
 
-// The changes are now in the system! I can get all the IP information for every interface by calling this:
+/*  The changes are now in the system!
+ *  I can get all the IP information for every interface
+ * by calling this:
+ */
 net.status().then(status => {
   console.log(status);
 });
