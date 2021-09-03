@@ -1,5 +1,6 @@
 'use strict';
 
+process.env.TESTENV = "true";
 const mockSpawn = require('mock-spawn');
 const mySpawn = mockSpawn();
 require('child_process').spawn = mySpawn;
@@ -8,6 +9,7 @@ const expect = require('chai').expect;
 const assert = require('chai').assert;
 const sandbox = require('sinon').createSandbox();
 const fs = require('fs');
+const memfs = require('memfs');
 
 const testData = {
 	oneStaticEth:
@@ -29,16 +31,6 @@ const testData = {
 	route6output: fs.readFileSync(`${__dirname}/../data/route6output.txt`, 'utf8'),
 	route6OutputWithGateway: fs.readFileSync(`${__dirname}/../data/route6outputwithgateway.txt`, 'utf8')
 };
-
-async function expectError(fn) {
-	let error = null;
-	try {
-		await fn()
-	} catch (thrown) {
-		error = thrown;
-	}
-	assert(error !== null);
-}
 
 describe('/lib/netplan', function() {
 
@@ -71,8 +63,10 @@ describe('/lib/netplan', function() {
 
 	describe('loadConfig', function() {
 		it('valid', function(done) {
+			memfs.mkdirSync('/tmp', {recursive: true});
+			memfs.writeFileSync('/tmp/1StaticEth.yaml', JSON.stringify(testData.oneStaticEth, null, 2));
 			const netplan = new NetPlan({
-				configFile: `${__dirname}/../data/1StaticEth.yaml`
+				configFile: '/tmp/1StaticEth.yaml'
 			});
 			netplan.loadConfig();
 			expect(
