@@ -59,10 +59,10 @@ export default class NetplanConfig {
   ): void
   configureInterface(
     name: string,
-    options: {
-      dhcp: boolean
+    options: { dhcp:true } | {
+      dhcp: false
       ip?: string
-      prefix: number
+      prefix?: number
       defaultGateway?: string
       domain?: string
       nameservers?: string[]
