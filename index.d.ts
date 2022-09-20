@@ -1,4 +1,4 @@
-export type netplanConfig_config = {
+type netplanConfig_options = {
   network?: {
     version: number
     renderer: 'networkd' | 'NetworkManager'
@@ -7,15 +7,16 @@ export type netplanConfig_config = {
   } & Record<string, unknown>
   configFile?: string
 }
-export default class NetplanConfig {
-  static plan: Pick<netplanConfig_config, 'network'>
-  static configFile: Pick<netplanConfig_config, 'configFile'>
+
+declare class NetplanConfig {
+  static plan: Pick<netplanConfig_options, 'network'>
+  static configFile: Pick<netplanConfig_options, 'configFile'>
   static oldConfig: string
   static newConfig: string
   static binary: string
   static ipBinary: string
   static routeBinary: string
-  constructor(config?: netplanConfig_config)
+  constructor(config?: netplanConfig_options)
   readConfigFile(filePath: string): Record<string, string>
   loadConfig(): void
   writeConfig(): void
@@ -59,18 +60,20 @@ export default class NetplanConfig {
   ): void
   configureInterface(
     name: string,
-    options: { dhcp:true } | {
-      dhcp: false
-      ip?: string
-      prefix?: number
-      defaultGateway?: string
-      domain?: string
-      nameservers?: string[]
-      accessPoint?: {
-        ssid: string
-        wifiPassword: string
-      }
-    }
+    options:
+      | { dhcp: true }
+      | {
+          dhcp: false
+          ip?: string
+          prefix?: number
+          defaultGateway?: string
+          domain?: string
+          nameservers?: string[]
+          accessPoint?: {
+            ssid: string
+            wifiPassword: string
+          }
+        }
   ): void
   static executeBinary(
     binPath: string,
@@ -80,3 +83,8 @@ export default class NetplanConfig {
   generate(): Promise<Record<string, unknown>>
   apply(force?: boolean): Promise<void>
 }
+declare namespace NetplanConfig {
+  type NetplanConfigOptions = netplanConfig_options
+}
+
+export = NetplanConfig
