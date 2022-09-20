@@ -17,7 +17,7 @@ declare class NetplanConfig {
   static ipBinary: string
   static routeBinary: string
   constructor(config?: netplanConfig_options)
-  readConfigFile(filePath: string): Record<string, string>
+  readConfigFile(filePath: string): Record<string, unknown>
   loadConfig(): void
   writeConfig(): void
   configureNetplanInterface(options: {
