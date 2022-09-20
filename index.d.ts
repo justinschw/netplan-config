@@ -9,7 +9,7 @@ type netplanConfig_options = {
 }
 
 declare class NetplanConfig {
-  static plan: Pick<netplanConfig_options, 'network'>
+  plan: Pick<netplanConfig_options, 'network'>
   static configFile: Pick<netplanConfig_options, 'configFile'>
   static oldConfig: string
   static newConfig: string
